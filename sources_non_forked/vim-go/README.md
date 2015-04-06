@@ -37,26 +37,28 @@ disabled/enabled easily.
 
 ## Install
 
-First of all, do not use it with other Go plugins. If you use pathogen, just
-clone it into your bundle directory:
+Vim-go follows the standard runtime path structure, so I highly recommend to use
+a common and well known plugin manager to install vim-go. Do not use vim-go with
+other Go plugins. For Pathogen just clone the repo, for other plugin managers
+add the appropriate lines and execute the plugin's install command.
 
-```bash
-$ cd ~/.vim/bundle
-$ git clone https://github.com/fatih/vim-go.git
-```
+*  [Pathogen](https://github.com/tpope/vim-pathogen)
+  * `git clone https://github.com/fatih/vim-go.git ~/.vim/bundle/vim-go`
+*  [vim-plug](https://github.com/junegunn/vim-plug)
+  * `Plug 'fatih/vim-go'`
+*  [NeoBundle](https://github.com/Shougo/neobundle.vim)
+  * `NeoBundle 'fatih/vim-go'`
+*  [Vundle](https://github.com/gmarik/vundle)
+  * `Plugin 'fatih/vim-go'`
+*  Manual
+  *  Copy all of the files into your `~/.vim` directory
 
-For Vundle add this line to your vimrc:
-
-```vimrc
-Plugin 'fatih/vim-go'
-```
-and execute `:PluginInstall` (or `:BundleInstall` for older versions of Vundle)
 
 Please be sure all necessary binaries are installed (such as `gocode`, `godef`,
 `goimports`, etc..). You can easily install them with the included
-`:GoInstallBinaries` command. Those binaries will be automatically downloaded
-and installed to your `$GOBIN` environment (if not set it will use
-`$GOPATH/bin`).  It requires `git` and `hg` for fetching the individual Go
+`:GoInstallBinaries` command. If you invoke it, all necessary binaries will be
+automatically downloaded and installed to your `$GOBIN` environment (if not set
+it will use `$GOPATH/bin`).  It requires `git` for fetching the individual Go
 packages.
 
 ### Optional
@@ -86,7 +88,7 @@ vim-go has several `<Plug>` mappings which can be used to create custom
 mappings. Below are some examples you might find useful:
 
 Show a list of interfaces which is implemented by the type under your cursor
-with `<leader>s` 
+with `<leader>s`
 
 ```vim
 au FileType go nmap <Leader>s <Plug>(go-implements)
@@ -185,6 +187,8 @@ To change it:
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 ```
 
 ## Troubleshooting
@@ -196,13 +200,13 @@ If trying to use `:GoDef`,  `:GoInfo` and get a `command not found`, check that 
 Before opening vim, check your current `$PATH`:
 
 	echo $PATH
-	
-after opening vim, run `:echo $PATH`, the output must be your current `$PATH` + `$PATH/bin` (the location where `:GoInstallBinaries` installed the binaries
+
+after opening vim, run `:echo $PATH`, the output must be your current `$PATH` + `$GOPATH/bin` (the location where `:GoInstallBinaries` installed the binaries
 
 If problem persists and you are using maybe 'csh' or other shell, try adding this to your .vimrc:
 
     set shell=/bin/sh
-   
+
 
 
 ### I'm using Fish shell but have some problems using Vim-go
@@ -238,7 +242,7 @@ Give it a try. I hope you like it. Feel free to contribute to the project.
 
 ## Donations
 
-Vim-go is an open source project and I'm working on it on my free times. I'm spending a lot of time and thoughts to make it stable, fixing bugs, adding new features, etc... If you like vim-go and find it helpful, you might give me a gift from some of the books (kindle) I have in my wish list: 
+Vim-go is an open source project and I'm working on it on my free times. I'm spending a lot of time and thoughts to make it stable, fixing bugs, adding new features, etc... If you like vim-go and find it helpful, you might give me a gift from some of the books (kindle) I have in my wish list:
 
 [Amazon.com Fatih's Wish List](http://amzn.com/w/3RUTKZC0U30P6). Thanks!
 

@@ -1,139 +1,148 @@
-# Foldsearch
+# ack.vim
 
-This plugin provides commands that fold away lines that don't match a specific
-search pattern. This pattern can be the word under the cursor, the last search
-pattern, a regular expression or spelling errors. There are also commands to
-change the context of the shown lines.
+Run your favorite search tool from Vim, with an enhanced results list.
 
-The plugin can be found on [Bitbucket], [GitHub] and [VIM online].
+This plugin was designed as a Vim frontend for the Perl module [App::Ack]. Ack
+can be used as a replacement for 99% of the uses of _grep_. The plugin allows
+you to run ack from vim, and shows the results in a split window.
 
-## Commands
+But here's a little secret for the Vim-seasoned: it's just a light wrapper for
+Vim's [grepprg] and the [quickfix] window for match results. This makes it easy
+to integrate with your own Vim configuration and use existing knowledge of core
+features. It also means the plugin is flexible to use with other search tools.
 
-### The `:Fw` command
+[App::Ack]: http://search.cpan.org/~petdance/ack/ack
+[grepprg]: http://vimdoc.sourceforge.net/htmldoc/options.html#'grepprg'
+[quickfix]: http://vimdoc.sourceforge.net/htmldoc/quickfix.html#quickfix
 
-Show lines which contain the word under the cursor.
+## Installation
 
-The optional *context* option consists of one or two numbers:
+### Ack
 
-  - A 'unsigned' number defines the context before and after the pattern.
-  - If a number has a '-' prefix, it defines only the context before the pattern.
-  - If it has a '+' prefix, it defines only the context after a pattern.
+You will need ack (>= 2.0), of course. To install it follow the
+[manual](http://beyondgrep.com/install/).
 
-Default *context* is current context.
+### The Plugin
 
-### The `:Fs` command
+It is recommended to use one of the popular plugin managers for Vim. There are
+many and you probably already have a preferred one, but a few examples for your
+copy-and-paste convenience:
 
-Show lines which contain previous search pattern.
+#### Vundle
 
-For a description of the optional *context* please see |:Fw|
+    Plugin 'mileszs/ack.vim'
 
-Default *context* is current context.
+#### NeoBundle
 
-### The `:Fp` command
+    NeoBundle 'mileszs/ack.vim'
 
-Show the lines that contain the given regular expression.
+#### Manual (not recommended)
 
-Please see |regular-expression| for patterns that are accepted.
+[Download][releases] the plugin and extract it in `~/.vim/` (or
+`%PROGRAMFILES%/Vim/vimfiles` on Windows).
 
-### The `:FS` command
+[zipball]: https://github.com/mileszs/ack.vim/archive/master.zip
 
-Show the lines that contain spelling errors.
+## Usage
 
-### The `:Fl` command
+    :Ack [options] {pattern} [{directories}]
 
-Fold again with the last used pattern
+Search recursively in `{directories}` (which defaults to the current directory)
+for the `{pattern}`.
 
-### The `:Fc` command
+Files containing the search term will be listed in the quickfix window, along
+with the line number of the occurrence, once for each occurrence. `<Enter>` on
+a line in this window will open the file, and place the cursor on the matching
+line.
 
-Show or modify current *context* lines around matching pattern.
+Just like where you use `:grep`, `:grepadd`, `:lgrep`, and :`lgrepadd`, you can
+use `:Ack`, `:AckAdd`, `:LAck`, and `:LAckAdd` respectively. (See `:help Ack`
+after installing, or [`doc/ack.txt`][doc] in the repo, for more information.)
 
-For a description of the optional *context* option please see |:Fw|
+For more ack help see [ack documentation](http://beyondgrep.com/documentation/).
 
-### The `:Fi` command
+[doc]: https://github.com/mileszs/ack.vim/blob/master/doc/ack.txt
 
-Increment *context* by one line.
+### Keyboard Shortcuts
 
-### The `:Fd` command
+The quickfix results window is augmented with these convenience mappings:
 
-Decrement *context* by one line.
+    ?    a quick summary of these keys, repeat to close
+    o    to open (same as Enter)
+    O    to open and close the quickfix window
+    go   to preview file, open but maintain focus on ack.vim results
+    t    to open in new tab
+    T    to open in new tab without moving to it
+    h    to open in horizontal split
+    H    to open in horizontal split, keeping focus on the results
+    v    to open in vertical split
+    gv   to open in vertical split, keeping focus on the results
+    q    to close the quickfix window
 
-### The `:Fe` command
+### Gotchas
 
-Set modified fold options to their previous value and end foldsearch.
+Some characters have special meaning, and need to be escaped in your search
+pattern. For instance, `#`. You need to escape it with `:Ack '\\\#define
+foo'` to search for '#define foo'. See [issue #5].
 
-## Mappings
+[issue #5]: https://github.com/mileszs/ack.vim/issues/5
 
-  - `Leader>fw` : `:Fw` with current context
-  - `Leader>fs` : `:Fs` with current context
-  - `Leader>fS` : `:FS`
-  - `Leader>fl` : `:Fl`
-  - `Leader>fi` : `:Fi`
-  - `Leader>fd` : `:Fd`
-  - `Leader>fe` : `:Fe`
+## Possibly FAQ
 
-Mappings can be disabled by setting |g:foldsearch_disable_mappings| to 1
+#### Can I use `ag` ([The Silver Searcher]) with this?
 
-## Settings
+Absolutely, and probably other tools if their output is similar or you can
+write a pattern match for it--just set `g:ackprg`. If you like, you can fall
+back to Ack in case you use your vimrc on a system without Ag available:
 
-Use: `let g:option_name=option_value` to set them in your global vimrc.
+```vim
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+```
 
-### The `g:foldsearch_highlight` setting
+Since Ack is quite portable you might check a copy of it into your dotfiles
+repository in `~/bin` so you'll nearly always have it available.
 
-Highlight the pattern used for folding.
+#### What's the difference from ag.vim?
 
-  - Value `0`: Don't highlight pattern
-  - Value `1`: Highlight pattern
-  - Default: `0`
+Well... not a lot really.
 
-### The `g:foldsearch_disable_mappings` setting
+Present maintainer, yours truly, [kind of wishes they never forked][sadface],
+contributes to both, and wouldn't mind seeing them merged again. ag.vim got a
+nice code clean-up (which ack.vim is now hopefully getting), and ack.vim picked
+up a few features that haven't made their way to ag.vim, like `:AckWindow`,
+optional background search execution with [vim-dispatch], and auto-previewing.
 
-Disable the mappings. Use this to define your own mappings or to use the
-plugin via commands only.
-
-  - Value `0`: Don't disable mappings (use mappings)
-  - Value `1`: Disable Mappings
-  - Default: `0`
-
-## Contribute
-
-To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>
-
-If you think this plugin could be improved, fork on [Bitbucket] or [GitHub] and
-send a pull request or just tell me your ideas.
-
-## Credits
-
-  - Karl Mowatt-Wilson for bug reports
-  - John Appleseed for patches
+[The Silver Searcher]: https://github.com/ggreer/the_silver_searcher
+[sadface]: https://github.com/mileszs/ack.vim/commit/d97090fb502d40229e6976dfec0e06636ba227d5#commitcomment-5771145
 
 ## Changelog
 
-v1.1.1 : 2014-12-17
+Please see [the Github releases page][releases].
 
-  - bugfix: add missing `call` to ex command
+### 1.0.9 (unreleased)
 
-v1.1.0 : 2014-12-15
+* Fix location list and layout of quickfix when using Dispatch (#154)
+* Fix the quick help overlay clobbering the list mappings
+* Fix `:AckFile` when using Dispatch
+* Restore original `'makeprg'` and `'errorformat'` when using Dispatch
+* Internal refactoring and clean-up
 
-  - use vim autoload feature to load functions on demand
-  - better save/restore of modified options
+## Credits
 
-v1.0.1 : 2013-03-20
+This plugin is derived from Antoine Imbert's blog post [Ack and Vim
+Integration][] (in particular, the function in the update to the post). [Miles
+Sterrett][mileszs] packaged it up as a plugin and documented it in Vim's help
+format, and since then [many contributors][contributors] have submitted
+enhancements and fixes.
 
-  - added |g:foldsearch_disable_mappings| config variable
+And of course, where would we be without [Ack]. And, you know, Vim.
 
-v1.0.0 : 2012-10-10
+[Ack and Vim Integration]: http://blog.ant0ine.com/typepad/2007/03/ack-and-vim-integration.html
+[mileszs]: https://github.com/mileszs
+[contributors]: https://github.com/mileszs/ack.vim/graphs/contributors
+[Ack]: http://beyondgrep.com/
 
-  - handle multiline regular expressions correctly
-
-v2213 : 2008-07-26
-
-  - fixed a bug in context handling
-
-v2209 : 2008-07-17
-
-  - initial version
-
-
-[Bitbucket]: https://bitbucket.org/embear/foldsearch
-[GitHub]: https://github.com/embear/vim-foldsearch
-[VIM online]: http://www.vim.org/scripts/script.php?script_id=2302
+[vim-dispatch]: https://github.com/tpope/vim-dispatch
+[releases]: https://github.com/mileszs/ack.vim/releases

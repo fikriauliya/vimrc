@@ -1,131 +1,139 @@
-# ack.vim
+# Foldsearch
 
-This plugin is a front for the Perl module
-[App::Ack](http://search.cpan.org/~petdance/ack/ack).  Ack can be used as a
-replacement for 99% of the uses of _grep_.  This plugin will allow you to run
-ack from vim, and shows the results in a split window.
+This plugin provides commands that fold away lines that don't match a specific
+search pattern. This pattern can be the word under the cursor, the last search
+pattern, a regular expression or spelling errors. There are also commands to
+change the context of the shown lines.
 
-## Installation
+The plugin can be found on [Bitbucket], [GitHub] and [VIM online].
 
-### Ack
+## Commands
 
-You will need the ack(>= 2.0), of course, to install it follow the
-[manual](http://beyondgrep.com/install/)
+### The `:Fw` command
 
-### The Plugin
+Show lines which contain the word under the cursor.
 
-To install it is recommended to use one of the popular package managers for Vim,
-rather than installing by drag and drop all required files into your `.vim` folder.
+The optional *context* option consists of one or two numbers:
 
-#### Manual (not recommended)
+  - A 'unsigned' number defines the context before and after the pattern.
+  - If a number has a '-' prefix, it defines only the context before the pattern.
+  - If it has a '+' prefix, it defines only the context after a pattern.
 
-Just
-[download](https://github.com/mileszs/ack.vim/archive/kb-improve-readme.zip) the
-plugin and put it in your `~/.vim/`(or `%PROGRAMFILES%/Vim/vimfiles` on windows)
+Default *context* is current context.
 
-#### Vundle
+### The `:Fs` command
 
-    Bundle 'mileszs/ack.vim'
+Show lines which contain previous search pattern.
 
-#### NeoBundle
+For a description of the optional *context* please see |:Fw|
 
-    NeoBundle 'mileszs/ack.vim'
+Default *context* is current context.
 
-## Usage
+### The `:Fp` command
 
-    :Ack [options] {pattern} [{directories}]
+Show the lines that contain the given regular expression.
 
-Search recursively in {directory} (which defaults to the current directory) for
-the {pattern}.
+Please see |regular-expression| for patterns that are accepted.
 
-Files containing the search term will be listed in the split window, along with
-the line number of the occurrence, once for each occurrence.  [Enter] on a line
-in this window will open the file, and place the cursor on the matching line.
+### The `:FS` command
 
-Just like where you use :grep, :grepadd, :lgrep, and :lgrepadd, you can use
-`:Ack`, `:AckAdd`, `:LAck`, and `:LAckAdd` respectively.
-(See `doc/ack.txt`, or install and `:h Ack` for more information.)
+Show the lines that contain spelling errors.
 
-For more ack options see
-[ack documentation](http://beyondgrep.com/documentation/)
+### The `:Fl` command
 
-### Keyboard Shortcuts
+Fold again with the last used pattern
 
-In the quickfix window, you can use:
+### The `:Fc` command
 
-    o    to open (same as enter)
-    O    to open and close quickfix window
-    go   to preview file (open but maintain focus on ack.vim results)
-    t    to open in new tab
-    T    to open in new tab silently
-    h    to open in horizontal split
-    H    to open in horizontal split silently
-    v    to open in vertical split
-    gv   to open in vertical split silently
-    q    to close the quickfix window
+Show or modify current *context* lines around matching pattern.
 
-This Vim plugin is derived (and by derived, I mean copied, essentially) from
-Antoine Imbert's blog post
-[Ack and Vim Integration](http://blog.ant0ine.com/typepad/2007/03/ack-and-vim-integration.html)
-(in particular, the function at the bottom of the post).  I added a help file that
-provides just enough reference to get you going.  I also highly recommend you
-check out the docs for the Perl script 'ack', for obvious reasons:
-[ack - grep-like text finder](http://beyondgrep.com/).
+For a description of the optional *context* option please see |:Fw|
 
-### Gotchas
+### The `:Fi` command
 
-Some characters have special meaning, and need to be escaped your search
-pattern. For instance, '#'. You have to escape it like this `:Ack '\\\#define
-foo'` to search for '#define foo'. (From blueyed in issue #5.)
+Increment *context* by one line.
+
+### The `:Fd` command
+
+Decrement *context* by one line.
+
+### The `:Fe` command
+
+Set modified fold options to their previous value and end foldsearch.
+
+## Mappings
+
+  - `Leader>fw` : `:Fw` with current context
+  - `Leader>fs` : `:Fs` with current context
+  - `Leader>fS` : `:FS`
+  - `Leader>fl` : `:Fl`
+  - `Leader>fi` : `:Fi`
+  - `Leader>fd` : `:Fd`
+  - `Leader>fe` : `:Fe`
+
+Mappings can be disabled by setting |g:foldsearch_disable_mappings| to 1
+
+## Settings
+
+Use: `let g:option_name=option_value` to set them in your global vimrc.
+
+### The `g:foldsearch_highlight` setting
+
+Highlight the pattern used for folding.
+
+  - Value `0`: Don't highlight pattern
+  - Value `1`: Highlight pattern
+  - Default: `0`
+
+### The `g:foldsearch_disable_mappings` setting
+
+Disable the mappings. Use this to define your own mappings or to use the
+plugin via commands only.
+
+  - Value `0`: Don't disable mappings (use mappings)
+  - Value `1`: Disable Mappings
+  - Default: `0`
+
+## Contribute
+
+To contact the author (Markus Braun), please send an email to <markus.braun@krawel.de>
+
+If you think this plugin could be improved, fork on [Bitbucket] or [GitHub] and
+send a pull request or just tell me your ideas.
+
+## Credits
+
+  - Karl Mowatt-Wilson for bug reports
+  - John Appleseed for patches
 
 ## Changelog
 
-### 1.0
+v1.1.1 : 2014-12-17
 
-* Remove support to ack 1.x
-* Start to use a Changelog
-* Use `autoload` directory to define functions, instead of `plugin`.
-* Add option to auto fold the results(`g:ack_autofold_results`)
-* Improve documentation, list all options and shortcuts
-* Improve highlight option to work when passes directories or use quotes.
-* Add g:ack_mapping
-* Add g:ack_default_options
-* Add a help toggle `?`(like NERDTree)
+  - bugfix: add missing `call` to ex command
 
-### 1.0.1
+v1.1.0 : 2014-12-15
 
-* Fixes #124. Bug with `g:ack_autofold_results`
+  - use vim autoload feature to load functions on demand
+  - better save/restore of modified options
 
-### 1.0.2
+v1.0.1 : 2013-03-20
 
-* Add compatibility with [vim-dispatch](https://github.com/tpope/vim-dispatch)
+  - added |g:foldsearch_disable_mappings| config variable
 
-### 1.0.3
+v1.0.0 : 2012-10-10
 
-* Fixes #127. Use `&l:hlsearch` instead of `v:hlsearch` to keep compatibility
-with versions that does not have this variable.
+  - handle multiline regular expressions correctly
 
-### 1.0.4
+v2213 : 2008-07-26
 
-* Fixes #128. Always apply mappings, even when using vim-dispatch.
+  - fixed a bug in context handling
 
-### 1.0.5
+v2209 : 2008-07-17
 
-* Fixes #128. Fixes the `errorformat` for ack when using vim-dispatch.
-* Do not use vim-dispatch by default. To use vim-dispath must set
-`g:ack_use_dispatch`
+  - initial version
 
-### 1.0.6
 
-* Fixes highlight function to work when user passes options. Ex.: Ack -i test
-  Thank's @mannih. (#131, #134)
-
-### 1.0.7
-
-* Fixes highlight function to work when passes more than one option, or options
-with double dashes(--option) Thank's to @MiguelLatorre and @mannih
-
-### 1.0.8
-
-* Fixes (again) highlight, now using negative look behind.
-* Change mappings `o` and `O` to behave as documented
+[Bitbucket]: https://bitbucket.org/embear/foldsearch
+[GitHub]: https://github.com/embear/vim-foldsearch
+[VIM online]: http://www.vim.org/scripts/script.php?script_id=2302

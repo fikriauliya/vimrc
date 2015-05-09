@@ -1,0 +1,1 @@
+tcomment.vba: call delete('/Users/fikri/.vim_runtime/sources_non_forked/tcomment//doc/tcomment.txt')|call delete('/Users/fikri/.vim_runtime/sources_non_forked/tcomment//plugin/tcomment.vim')|call delete('/Users/fikri/.vim_runtime/sources_non_forked/tcomment//autoload/tcomment.vim')

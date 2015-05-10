@@ -72,3 +72,8 @@ nnoremap \ :Ag<SPACE>
 " :set dictionary="/usr/dict/words"
 
 set number
+
+let g:session_autoload = 'no'
+let g:session_autosave = 'yes'
+
+let g:multi_cursor_next_key="\<C-m>"

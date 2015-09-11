@@ -1,4 +1,5 @@
 set tabstop=2 shiftwidth=2 expandtab
+set nowrap
 
 "Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1

@@ -17,6 +17,8 @@ nmap <leader>T :enew<cr>
 
 map <C-J> :bnext<CR>
 map <C-K> :bprev<CR>
+map <C-H> :tabp<CR>
+map <C-L> :tabn<CR>
 
 " Move to the next buffer
 " nmap <leader>l :bnext<CR>

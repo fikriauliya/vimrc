@@ -7,9 +7,18 @@ let g:airline#extensions#tabline#enabled = 1
 "Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
 
+let g:airline_theme='powerlineish'
+
+let g:airline_powerline_fonts = 1
+
 " This allows buffers to be hidden if you've modified a buffer.
 " This is almost a must if you wish to use buffers in this way.
 set hidden
+
+"https://github.com/vim-ctrlspace/vim-ctrlspace
+set nocompatible
+" set showtabline=0
+" let g:airline_exclude_preview = 1
 
 " To open a new empty buffer
 " This replaces :tabnew which I used to bind to this mapping
@@ -43,6 +52,7 @@ if executable('ag')
   
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
 
   " ag is fast enough that CtrlP doesn't need to cache
   " let g:ctrlp_use_caching = 0
@@ -80,3 +90,18 @@ let g:session_autoload = 'no'
 let g:session_autosave = 'yes'
 
 let g:multi_cursor_next_key="\<C-m>"
+
+" colorscheme ir_black
+"  colorscheme desert
+colorscheme molokai
+" set clipboard=unnamedplus
+
+let g:gitgutter_enabled = 1
+let g:gitgutter_signs = 1
+
+let g:airline#extensions#tmuxline#enabled = 1
+let g:tmuxline_preset = 'nightly_fox'
+
+set cmdheight=1
+
+set hlsearch

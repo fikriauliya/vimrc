@@ -1,5 +1,8 @@
 set tabstop=2 shiftwidth=2 expandtab
 set nowrap
+set colorcolumn=120
+set textwidth=120
+
 
 "Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 1
@@ -105,3 +108,8 @@ let g:tmuxline_preset = 'nightly_fox'
 set cmdheight=1
 
 set hlsearch
+
+map <leader>tt :TagbarToggle<cr>
+
+let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+execute "set rtp+=" . g:opamshare . "/merlin/vim"
